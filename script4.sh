@@ -1,6 +1,6 @@
 #!/bin/bash
 
-/bin/echo -e "\033[31mApplying patch1..Please Wait! \033[0m"
+/bin/echo -e "\033[31mApplying patch4..Please Wait! \033[0m"
 
 /var/lib/ambari-server/resources/scripts/configs.sh -u admin -p admin -port 8080 set node1.openstacklocal hdptest ranger-ugsync-site  "ranger.usersync.unix.minUserId" "1500" &>/tmp/var_out4
 

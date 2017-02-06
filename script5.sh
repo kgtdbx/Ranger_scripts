@@ -1,6 +1,6 @@
 #!/bin/bash
 
-/bin/echo -e "\033[31mApplying patch1..Please Wait! \033[0m"
+/bin/echo -e "\033[31mApplying patch5..Please Wait! \033[0m"
 
 /var/lib/ambari-server/resources/scripts/configs.sh -u admin -p admin -port 8080 set node1.openstacklocal hdptest ranger-admin-site  "ranger.unixauth.remote.login.enabled" "false" &>/tmp/var_out5
 
