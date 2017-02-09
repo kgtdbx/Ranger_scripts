@@ -24,4 +24,8 @@ curl -u admin:admin -i -H 'X-Requested-By: ambari' -X PUT -d  '{"RequestInfo": {
 
 sleep 2
 
+session_id=`cat /var/log/ambari-server/ambari-server.log  |grep "Got Session ID"  |tail -n 1 |awk '{print $14}'`
+curl -u admin:admin -i -H 'X-Requested-By:ambari' -H "Cookie: AMBARISESSIONID=$session_id" -X GET http://node1.openstacklocal:8080/api/v1/logout &>/tmp/admin_logout
+rm -fr ./doSet*
+
 /bin/echo -e "\033[32mPatch successfully applied \033[0m"
