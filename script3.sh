@@ -4,7 +4,7 @@
 
 sleep 2
 
-/var/lib/ambari-server/resources/scripts/configs.sh -u admin -p admin -port 8080 set node1.openstacklocal hdptest ranger-ugsync-site  "ranger.usersync.source.impl.class" "org.apache.ranger.unixusersync.process.FileSourceUserGroupBuilder" &>/tmp/var_out3
+/var/lib/ambari-server/resources/scripts/configs.sh -u admin -p admin -port 8080 set `hostname` hdptest ranger-ugsync-site  "ranger.usersync.source.impl.class" "org.apache.ranger.unixusersync.process.FileSourceUserGroupBuilder" &>/tmp/var_out3
 
 sleep 2
 
@@ -16,16 +16,16 @@ sleep 2
 
 sleep 2
 
-curl -u admin:admin -i -H 'X-Requested-By: ambari' -X PUT -d '{"RequestInfo": {"context" :"Stop RANGER via REST"}, "Body": {"ServiceInfo": {"state": "INSTALLED"}}}' http://node1.openstacklocal:8080/api/v1/clusters/hdptest/services/RANGER &>/tmp/out3
+curl -u admin:admin -i -H 'X-Requested-By: ambari' -X PUT -d '{"RequestInfo": {"context" :"Stop RANGER via REST"}, "Body": {"ServiceInfo": {"state": "INSTALLED"}}}' http://`hostname`:8080/api/v1/clusters/hdptest/services/RANGER &>/tmp/out3
 
 sleep 15
 
-curl -u admin:admin -i -H 'X-Requested-By: ambari' -X PUT -d  '{"RequestInfo": {"context" :"Start RANGER via REST"}, "Body": {"ServiceInfo": {"state": "STARTED"}}}'  http://node1.openstacklocal:8080/api/v1/clusters/hdptest/services/RANGER &>>/tmp/out3
+curl -u admin:admin -i -H 'X-Requested-By: ambari' -X PUT -d  '{"RequestInfo": {"context" :"Start RANGER via REST"}, "Body": {"ServiceInfo": {"state": "STARTED"}}}'  http://`hostname`:8080/api/v1/clusters/hdptest/services/RANGER &>>/tmp/out3
 
 sleep 2
 
 session_id=`cat /var/log/ambari-server/ambari-server.log|grep "Got Session ID"|tail -n 1 |rev|cut -d' ' -f3|rev`
-curl -u admin:admin -i -H 'X-Requested-By:ambari' -H "Cookie: AMBARISESSIONID=$session_id" -X GET http://node1.openstacklocal:8080/api/v1/logout &>/tmp/admin_logout
+curl -u admin:admin -i -H 'X-Requested-By:ambari' -H "Cookie: AMBARISESSIONID=$session_id" -X GET http://`hostname`:8080/api/v1/logout &>/tmp/admin_logout
 rm -fr ./doSet*
 
 /bin/echo -e "\033[32mPatch successfully applied \033[0m"
