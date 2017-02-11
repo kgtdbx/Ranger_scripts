@@ -2,7 +2,10 @@
 
 /bin/echo -e "\033[31mApplying patch5..Please Wait! \033[0m"
 
-/var/lib/ambari-server/resources/scripts/configs.sh -u admin -p admin -port 8080 set `hostname` hdptest ranger-admin-site  "ranger.unixauth.remote.login.enabled" "false" &>/tmp/var_out5
+cluster_name=`curl -s  -u admin:admin -H "X-Requested-By: ambari" -X GET http://\`hostname\`:8080/api/v1/clusters|grep -i cluster_name |awk -F "\"" '{print $4}'`
+
+
+/var/lib/ambari-server/resources/scripts/configs.sh -u admin -p admin -port 8080 set `hostname` $cluster_name ranger-admin-site  "ranger.unixauth.remote.login.enabled" "false" &>/tmp/var_out5
 
 sleep 2
 
@@ -14,11 +17,11 @@ sleep 2
 
 sleep 2
 
-curl -u admin:admin -i -H 'X-Requested-By: ambari' -X PUT -d '{"RequestInfo": {"context" :"Stop RANGER via REST"}, "Body": {"ServiceInfo": {"state": "INSTALLED"}}}' http://`hostname`:8080/api/v1/clusters/hdptest/services/RANGER &>/tmp/out1
+curl -u admin:admin -i -H 'X-Requested-By: ambari' -X PUT -d '{"RequestInfo": {"context" :"Stop RANGER via REST"}, "Body": {"ServiceInfo": {"state": "INSTALLED"}}}' http://`hostname`:8080/api/v1/clusters/$cluster_name/services/RANGER &>/tmp/out1
 
 sleep 10
 
-curl -u admin:admin -i -H 'X-Requested-By: ambari' -X PUT -d  '{"RequestInfo": {"context" :"Start RANGER via REST"}, "Body": {"ServiceInfo": {"state": "STARTED"}}}'  http://`hostname`:8080/api/v1/clusters/hdptest/services/RANGER &>>/tmp/out5
+curl -u admin:admin -i -H 'X-Requested-By: ambari' -X PUT -d  '{"RequestInfo": {"context" :"Start RANGER via REST"}, "Body": {"ServiceInfo": {"state": "STARTED"}}}'  http://`hostname`:8080/api/v1/clusters/$cluster_name/services/RANGER &>>/tmp/out5
 
 sleep 2
 

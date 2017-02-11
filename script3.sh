@@ -2,9 +2,12 @@
 
 /bin/echo -e "\033[31mApplying patch3..Please Wait! \033[0m"
 
+cluster_name=`curl -s  -u admin:admin -H "X-Requested-By: ambari" -X GET http://\`hostname\`:8080/api/v1/clusters|grep -i cluster_name |awk -F "\"" '{print $4}'`
+
+
 sleep 2
 
-/var/lib/ambari-server/resources/scripts/configs.sh -u admin -p admin -port 8080 set `hostname` hdptest ranger-ugsync-site  "ranger.usersync.source.impl.class" "org.apache.ranger.unixusersync.process.FileSourceUserGroupBuilder" &>/tmp/var_out3
+/var/lib/ambari-server/resources/scripts/configs.sh -u admin -p admin -port 8080 set `hostname` $cluster_name ranger-ugsync-site  "ranger.usersync.source.impl.class" "org.apache.ranger.unixusersync.process.FileSourceUserGroupBuilder" &>/tmp/var_out3
 
 sleep 2
 
@@ -16,11 +19,11 @@ sleep 2
 
 sleep 2
 
-curl -u admin:admin -i -H 'X-Requested-By: ambari' -X PUT -d '{"RequestInfo": {"context" :"Stop RANGER via REST"}, "Body": {"ServiceInfo": {"state": "INSTALLED"}}}' http://`hostname`:8080/api/v1/clusters/hdptest/services/RANGER &>/tmp/out3
+curl -u admin:admin -i -H 'X-Requested-By: ambari' -X PUT -d '{"RequestInfo": {"context" :"Stop RANGER via REST"}, "Body": {"ServiceInfo": {"state": "INSTALLED"}}}' http://`hostname`:8080/api/v1/clusters/$cluster_name/services/RANGER &>/tmp/out3
 
 sleep 15
 
-curl -u admin:admin -i -H 'X-Requested-By: ambari' -X PUT -d  '{"RequestInfo": {"context" :"Start RANGER via REST"}, "Body": {"ServiceInfo": {"state": "STARTED"}}}'  http://`hostname`:8080/api/v1/clusters/hdptest/services/RANGER &>>/tmp/out3
+curl -u admin:admin -i -H 'X-Requested-By: ambari' -X PUT -d  '{"RequestInfo": {"context" :"Start RANGER via REST"}, "Body": {"ServiceInfo": {"state": "STARTED"}}}'  http://`hostname`:8080/api/v1/clusters/$cluster_name/services/RANGER &>>/tmp/out3
 
 sleep 2
 

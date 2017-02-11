@@ -2,6 +2,9 @@
 
 /bin/echo -e "\033[31mApplying patch1..Please Wait! \033[0m"
 
+cluster_name=`curl -s  -u admin:admin -H "X-Requested-By: ambari" -X GET http://\`hostname\`:8080/api/v1/clusters|grep -i cluster_name |awk -F "\"" '{print $4}'`
+
+
 #==========
 
 echo "log4j.logger.org.eclipse.jetty.server.session=DEBUG" >> /etc/ambari-server/conf/log4j.properties
@@ -35,11 +38,11 @@ sleep 2
 
 sleep 2
 
-curl -u admin:admin -i -H 'X-Requested-By: ambari' -X PUT -d '{"RequestInfo": {"context" :"Stop RANGER via REST"}, "Body": {"ServiceInfo": {"state": "INSTALLED"}}}' http://`hostname`:8080/api/v1/clusters/hdptest/services/RANGER &>/tmp/out1
+curl -u admin:admin -i -H 'X-Requested-By: ambari' -X PUT -d '{"RequestInfo": {"context" :"Stop RANGER via REST"}, "Body": {"ServiceInfo": {"state": "INSTALLED"}}}' http://`hostname`:8080/api/v1/clusters/$cluster_name/services/RANGER &>/tmp/out1
 
 sleep 15
 
-curl -u admin:admin -i -H 'X-Requested-By: ambari' -X PUT -d  '{"RequestInfo": {"context" :"Start RANGER via REST"}, "Body": {"ServiceInfo": {"state": "STARTED"}}}'  http://`hostname`:8080/api/v1/clusters/hdptest/services/RANGER &>/tmp/out2
+curl -u admin:admin -i -H 'X-Requested-By: ambari' -X PUT -d  '{"RequestInfo": {"context" :"Start RANGER via REST"}, "Body": {"ServiceInfo": {"state": "STARTED"}}}'  http://`hostname`:8080/api/v1/clusters/$cluster_name/services/RANGER &>/tmp/out2
 
 sleep 2
 
