@@ -34,7 +34,7 @@ sleep 2
 
 sleep 2
 
-/usr/bin/mysql -u root -predhat -e "update ranger.x_portal_user set password='643b28sdfsdf2d1d483fa0677ba63e0732fb' where first_name='amb_ranger_admin';"
+/usr/bin/mysql -u root -predhat -h `hostname` -e "update ranger.x_portal_user set password='643b28sdfsdf2d1d483fa0677ba63e0732fb' where first_name='amb_ranger_admin';"
 
 sleep 2
 
