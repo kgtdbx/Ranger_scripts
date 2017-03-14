@@ -40,11 +40,11 @@ sleep 2
 
 curl -u admin:admin -i -H 'X-Requested-By: ambari' -X PUT -d '{"RequestInfo": {"context" :"Stop RANGER via REST"}, "Body": {"ServiceInfo": {"state": "INSTALLED"}}}' http://`hostname`:8080/api/v1/clusters/$cluster_name/services/RANGER &>/tmp/out1
 
-sleep 15
+sleep 20
 
 curl -u admin:admin -i -H 'X-Requested-By: ambari' -X PUT -d  '{"RequestInfo": {"context" :"Start RANGER via REST"}, "Body": {"ServiceInfo": {"state": "STARTED"}}}'  http://`hostname`:8080/api/v1/clusters/$cluster_name/services/RANGER &>/tmp/out2
 
-sleep 15
+sleep 25
 
 /etc/init.d/ambari-server restart &>/tmp/as_restart.log
 rm -fr ./doSet*
