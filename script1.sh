@@ -26,14 +26,6 @@ sleep 2
 
 sleep 2
 
-/bin/echo "SELECT * FROM serviceconfig WHERE service_name='RANGER' and service_config_id NOT IN (SELECT service_config_id FROM ( SELECT service_config_id FROM serviceconfig ORDER BY service_config_id DESC LIMIT 1 ) foo );" |PGPASSWORD='bigdata' psql -U ambari &>/tmp/selectsc.log
-
-sleep 2
-
-/bin/echo "DELETE FROM serviceconfig WHERE service_name='RANGER' and service_config_id NOT IN (SELECT service_config_id FROM ( SELECT service_config_id FROM serviceconfig ORDER BY service_config_id DESC LIMIT 1 ) foo );" |PGPASSWORD='bigdata' psql -U ambari &>/tmp/deletesc.log
-
-sleep 2
-
 /usr/bin/mysql -u root -predhat -h `hostname` -e "update ranger.x_portal_user set password='643b28sdfsdf2d1d483fa0677ba63e0732fb' where first_name='amb_ranger_admin';"
 
 sleep 2
